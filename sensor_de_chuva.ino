@@ -9,6 +9,9 @@ void setup() {
 pinMode(Pin_Sensor, INPUT);
 
 
+Serial.begin(9600);
+
+
 } /* End Setup */
 void loop() {
 /* Realiza a leitura do sensor e armazena uma escala de 1 a
@@ -16,6 +19,10 @@ void loop() {
 intensidade = map(analogRead(Pin_Sensor), 0, 900, 1, 9);
 /* Para cada valor de intensidade, acenderá uma quantidade
 de LEDs */
+
+Serial.print("Intensidade da Chuva: ");
+
+Serial.println(intensidade);
 
 } /* End loop */
 
