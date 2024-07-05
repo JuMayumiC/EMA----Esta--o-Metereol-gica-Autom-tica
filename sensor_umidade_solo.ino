@@ -26,19 +26,12 @@ Serial.println("%");
 if (Porcento <= Valor_Critico) {
  /* Imprime a frase no monitor serial */
  Serial.println("Umidade baixa!");
- /* Acende o LED Vermelho */
- digitalWrite(pino_LED_Vermelho, HIGH);
- /* Apaga o LED Verde */
- digitalWrite(pino_LED_Verde, LOW);
+
 } /* End if */
 /* Se não... */
 else {
  /* Imprime a frase no monitor serial */
  Serial.println("Umidade Adequada...");
- /* Acende o LED Verde */
- digitalWrite(pino_LED_Verde, HIGH);
- /* Apaga o LED Vermelho */
- digitalWrite(pino_LED_Vermelho, LOW);
 } /* End else */
 /* Aguarda 1 segundo para reinicializar a nova leitura */
 delay (1000);
