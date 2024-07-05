@@ -1,8 +1,7 @@
 /* Programa: Sensor de Umidade do Solo */
 /* Definições de pinos para o sensor e para os LEDs */
 #define pino_Sensor A0
-#define pino_LED_Verde 3
-#define pino_LED_Vermelho 4
+
 /* Porcentagem de umidade mínima para iniciar a irrigação */
 int Valor_Critico = 45;
 /* Variável para armazenar o valor analógico do sensor */
@@ -11,9 +10,7 @@ void setup() {
 /* Inicia a comunicação serial com a velocidade de 9600
 bauds */
 Serial.begin(9600);
-/* Configura os pinos dos LEDs como saída */
-pinMode(pino_LED_Verde, OUTPUT);
-pinMode(pino_LED_Vermelho, OUTPUT);
+
 } /* End Setup */
 void loop() {
 /* Realiza a leitura do sensor e armazena o valor na
