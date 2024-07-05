@@ -1,6 +1,6 @@
 /* Programa: Sensor de Chuva */
 /* Define os pinos para o Sensor e para os LEDs */
-int Pin_Sensor = A0;
+int Pin_Sensor = A3;
 
 /* Variável que armazena a intensidade da chuva */
 int intensidade = 0;
