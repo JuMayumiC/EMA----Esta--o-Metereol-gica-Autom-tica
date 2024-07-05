@@ -16,13 +16,14 @@ Serial.begin(9600);
 void loop() {
 /* Realiza a leitura do sensor e armazena uma escala de 1 a
 9 */
-intensidade = map(analogRead(Pin_Sensor), 0, 900, 1, 9);
-/* Para cada valor de intensidade, acenderá uma quantidade
-de LEDs */
+intensidade = map(analogRead(Pin_Sensor), 1023, 900, 1, 9);
+
 
 Serial.print("Intensidade da Chuva: ");
 
 Serial.println(intensidade);
+
+delay(1000);
 
 } /* End loop */
 
