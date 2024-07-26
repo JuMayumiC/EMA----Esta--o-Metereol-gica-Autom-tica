@@ -1,3 +1,4 @@
+#include <Adafruit_Sensor.h>
 /* Programa: Sensor de Temperatura e Umidade DHT11 */
 /* Inclui a biblioteca de controle do sensor */
 #include "DHT.h"
