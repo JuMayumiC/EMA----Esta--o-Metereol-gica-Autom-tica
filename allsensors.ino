@@ -1,46 +1,31 @@
 #include <Adafruit_Sensor.h>
-#include "DHT.h"
-
-
+#include <DHT.h>
+#include <Adafruit_SSD1306.h>
+#include <Wire.h>
 
 // Definições de pinos
-//sensor de temperatura
-#define DHTPIN A0
-#define DHTTYPE DHT11
-//sensor de umidade do solo
-#define SUS A1
-//sensor de gás fumaça
-#define MQ_analogico A2
-#define MQ_digital 4
-//sensor de chuva
-#define pinoSensorChuva A3
+#define DHTPIN A0           // Pino do sensor de temperatura
+#define DHTTYPE DHT11       // Tipo do sensor de temperatura
+#define SUS A1              // Pino do sensor de umidade do solo
+#define MQ_analogico A2     // Pino do sensor de gás (análogo)
+#define MQ_digital 4        // Pino do sensor de gás (digital)
+#define pinoSensorChuva A3  // Pino do sensor de chuva
 
-
-
-//cria objeto de sensor da temperatura 
-DHT_Unified dht(DHTPIN, DHTTYPE);
-float delayMS ;
-
+// Criação dos objetos dos sensores
+DHT dht(DHTPIN, DHTTYPE);
 Adafruit_SSD1306 display(128, 64, &Wire, -1);
 
-// Variáveis
-/* Porcentagem de umidade mínima para iniciar a irrigação */
-int Valor_Critico = 45;
-/* Variável para armazenar o valor analógico do sensor */
-int ValAnalogIn;
-//variáveis do sensor de gás fumaça
-int valor_analogico;
-int valor_digital;
-/* Variável que armazena a intensidade da chuva */
-int intensidade = 0;
+// Variáveis globais
+int Valor_Critico = 45;    // Porcentagem mínima de umidade para iniciar a irrigação
+int ValAnalogIn;           // Valor analógico do sensor de umidade do solo
+int valor_analogico;       // Valor analógico do sensor de gás
+int valor_digital;         // Valor digital do sensor de gás
+int intensidade = 0;       // Intensidade da chuva
 
 void setup() {
-    Serial.begin(9600); 
+    Serial.begin(9600);
     
     dht.begin();
-    sensor_t sensor;
-    dht.temperature().getSensor(&sensor);
-    delayMS = sensor.min_delay / 500;
     
     display.begin(SSD1306_SWITCHCAPVCC, 0X3C);
     
@@ -50,59 +35,60 @@ void setup() {
     pinMode(pinoSensorChuva, INPUT);
 }
 
-
 void loop() {
-    /* Realiza a leitura do sensor e armazena os dados nas variáveis h e t */
-  float h = dht.readHumidity(); // Lê a umidade
-  float t = dht.readTemperature(); // Lê a temperatura em Celsius
-  
-  /* Verifica se a leitura do sensor foi bem-sucedida */
-  if (isnan(h) || isnan(t)) {
-    Serial.println("Falha ao ler o sensor DHT!");
-    return;
-  }
-  
-  /* Formata os dados de umidade e temperatura para impressão no monitor serial */
-  String H = String(h, 0); // Umidade sem casas decimais
-  String T = String(t, 1); // Temperatura com uma casa decimal
-  
-  /* Escreve no monitor serial os valores lidos de Umidade e Temperatura */
-  Serial.print("Umidade: ");
-  Serial.print(H);
-  Serial.print("%");
-  Serial.print("\t");
-  Serial.print("Temperatura: ");
-  Serial.print(T);
-  Serial.println("°C");
-  
-  /* Aguarda 2 segundos para a próxima leitura */
-  delay(2000);
+    // Leitura do sensor de temperatura e umidade
+    float h = dht.readHumidity();      // Lê a umidade
+    float t = dht.readTemperature();   // Lê a temperatura em Celsius
     
+    // Verificação de erro na leitura do sensor de temperatura
+    if (isnan(h) || isnan(t)) {
+        Serial.println("Falha ao ler o sensor DHT!");
+    } else {
+        // Formata os dados para impressão no monitor serial
+        Serial.print("Umidade: ");
+        Serial.print(h);
+        Serial.print("%\t");
+        Serial.print("Temperatura: ");
+        Serial.print(t);
+        Serial.println("°C");
+    }
+    
+    // Leitura do sensor de umidade do solo
+    ValAnalogIn = analogRead(SUS);
+    int Porcento = map(ValAnalogIn, 0, 1023, 0, 100);
+    
+    // Impressão da umidade do solo no monitor serial
+    Serial.print("Umidade do Solo: ");
     Serial.print(Porcento);
     Serial.println("%");
     
+    // Verificação da umidade do solo
     if (Porcento <= Valor_Critico) {
         Serial.println("Umidade baixa!");
     } else {
-        Serial.println("Umidade Adequada...");
+        Serial.println("Umidade adequada...");
     }
     
-    Serial.print("Nível detectado : ");
+    // Leitura do sensor de gás
+    valor_analogico = analogRead(MQ_analogico);
+    valor_digital = digitalRead(MQ_digital);
+    
+    // Impressão do nível de gás no monitor serial
+    Serial.print("Nível de Gás (analog): ");
     Serial.print(valor_analogico);
-    Serial.print(" || ");
-    if (valor_digital == 0)
-    {
+    Serial.print("\tNível de Gás (digital): ");
+    if (valor_digital == 0) {
         Serial.println("GÁS DETECTADO !!!");
+    } else {
+        Serial.println("GÁS AUSENTE !!!");
     }
-    else
-    {
-        Serial.println("GAS AUSENTE !!!");
-    }
-
-    intensidade = map(analogRead(Pin_Sensor), 0, 1023, 1, 100);
     
+    // Leitura do sensor de chuva
+    intensidade = map(analogRead(pinoSensorChuva), 0, 1023, 1, 100);
+    
+    // Impressão da intensidade da chuva no monitor serial
     Serial.print("Intensidade da chuva: ");
     Serial.println(intensidade);
     
-    delay(500);
+    delay(2000);  // Aguarda 2 segundos para a próxima leitura
 }
