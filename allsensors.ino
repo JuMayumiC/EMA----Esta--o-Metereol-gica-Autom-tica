@@ -1,16 +1,5 @@
-//Bibliotecas 
-// Adafruit GFX Library - Version: Latest 
-#include <Adafruit_GFX.h>
-
-
-// Adafruit SSD1306 - Version: Latest 
-#include <Adafruit_SSD1306.h>
-
-
-// Adafruit Unified Sensor - Version: Latest 
 #include <Adafruit_Sensor.h>
-#include <DHT.h>
-#include <DHT_U.h>
+#include "DHT.h"
 
 
 
