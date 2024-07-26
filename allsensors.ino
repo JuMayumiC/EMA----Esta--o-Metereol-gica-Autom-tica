@@ -63,28 +63,31 @@ void setup() {
 
 
 void loop() {
-    delay(delayMS);
-    
-    sensors_event_t event;
-    
-    dht.temperature().getEvent(&event);
-    
-    ValAnalogIn = analogRead(SUS);
-    int Porcento = map(ValAnalogIn, 1023, 0, 0, 100);
-    
-    valor_analogico = analogRead(MQ_analogico);
-    valor_digital = digitalRead(MQ_digital);
-    
-    intensidade = analogRead(pinoSensorChuva);
-    
-    if(isnan(event.temperature)) {
-        Serial.println("Erro de leitura da temperatura!");
-    } else {
-        Monitor_Serial_Temperatura(event.temperature);
-        Display_Temperatura(event.temperature);
-        delay(500);
-        
-    }
+    /* Realiza a leitura do sensor e armazena os dados nas variáveis h e t */
+  float h = dht.readHumidity(); // Lê a umidade
+  float t = dht.readTemperature(); // Lê a temperatura em Celsius
+  
+  /* Verifica se a leitura do sensor foi bem-sucedida */
+  if (isnan(h) || isnan(t)) {
+    Serial.println("Falha ao ler o sensor DHT!");
+    return;
+  }
+  
+  /* Formata os dados de umidade e temperatura para impressão no monitor serial */
+  String H = String(h, 0); // Umidade sem casas decimais
+  String T = String(t, 1); // Temperatura com uma casa decimal
+  
+  /* Escreve no monitor serial os valores lidos de Umidade e Temperatura */
+  Serial.print("Umidade: ");
+  Serial.print(H);
+  Serial.print("%");
+  Serial.print("\t");
+  Serial.print("Temperatura: ");
+  Serial.print(T);
+  Serial.println("°C");
+  
+  /* Aguarda 2 segundos para a próxima leitura */
+  delay(2000);
     
     Serial.print(Porcento);
     Serial.println("%");
@@ -106,6 +109,8 @@ void loop() {
     {
         Serial.println("GAS AUSENTE !!!");
     }
+
+    intensidade = map(analogRead(Pin_Sensor), 0, 1023, 1, 100);
     
     Serial.print("Intensidade da chuva: ");
     Serial.println(intensidade);
