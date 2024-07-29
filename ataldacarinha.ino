@@ -1,9 +1,9 @@
 #include <LiquidCrystal.h>
 
 // Inicializa o LCD com os números de pinos corretos.
-LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+LiquidCrystal lcd(12, 11, 7, 6, 5, 4);
 
-byte onefourthChar[] = {
+byte onefourthChar[8] = {
   B00000, 
   B00000,
   B00000,
@@ -14,7 +14,7 @@ byte onefourthChar[] = {
   B11111
 };
 
-byte onefourthCharFlipped[] = {
+byte onefourthCharFlipped[8] = {
   B11111,
   B11111,
   B00000, 
@@ -26,7 +26,7 @@ byte onefourthCharFlipped[] = {
 
 };
 
-byte fullChar[] = {
+byte fullChar[8] = {
   B11111, // 11111 em binário
   B11111, // 11111 em binário
   B11111, // 11111 em binário
@@ -38,7 +38,7 @@ byte fullChar[] = {
 };
 
 // Define o caractere original com padrão em triângulo.
-byte triangleChar[] = {
+byte triangleChar[8] = {
   B00001, // 00001 em binário
   B00011, // 00011 em binário
   B00111, // 00111 em binário
@@ -50,7 +50,7 @@ byte triangleChar[] = {
 };
 
 // Define o caractere espelhado horizontalmente.
-byte mirroredChar[] = {
+byte mirroredChar[8] = {
   B10000, // 10000 em binário
   B11000, // 11000 em binário
   B11100, // 11100 em binário
@@ -62,7 +62,7 @@ byte mirroredChar[] = {
 };
 
 // Define o caractere original espelhado verticalmente.
-byte triangleCharFlipped[] = {
+byte triangleCharFlipped[8] = {
   B11111, // 11111 em binário
   B11111, // 11111 em binário
   B11111, // 11111 em binário
@@ -74,7 +74,7 @@ byte triangleCharFlipped[] = {
 };
 
 // Define o caractere espelhado horizontalmente e também verticalmente.
-byte mirroredCharFlipped[] = {
+byte mirroredCharFlipped[8] = {
   B11111, // 11111 em binário
   B11111, // 11111 em binário
   B11111, // 11111 em binário
@@ -136,7 +136,7 @@ void loop() {
   lcd.write(byte(4)); // Caractere espelhado horizontal e verticalmente
   
 
-  delay(2000); // Espera 2 segundos
+  delay(1000); // Espera 2 segundos
 
    lcd.clear();
   // Exibe o primeiro conjunto de caracteres na primeira linha
